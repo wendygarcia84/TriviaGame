@@ -14,17 +14,25 @@
 // Increment correct or incorrect answers accordingly
 
 $(document).ready(function() {
+    $("#questions").hide();
+
+    $("#start-quiz").on("click", function() {
+        $("#start-quiz").hide();
+        $("#questions").show();
+
+    });
+
     $("#submit").on("click", function() {
         var correct = 0;
         var wrong = 0;
-        
+
         //Checking number of questions in the form, 
         //TO DO create a FOR loop based on this
-        console.log( document.forms.length );
+        for ( j = 0 ; j < document.forms.length ; j++ ) {
 
             // Gets the first form in the document and stores it in the variable
             // TO DO = do it with all questions (forms)
-            var answers = document.forms[0];
+            var answers = document.forms[j];
             
             console.log(answers);
             console.log(answers.length);
@@ -34,9 +42,11 @@ $(document).ready(function() {
                     correct++;
                     break;
                 } else if (answers[i].checked && answers[i].value === 'wrong')  {
-                    console.log("FALSE OR UNANSWERED")
+                    console.log("FALSE")
                     wrong++;
                 }
             }
-        });
+        }
+        console.log(correct + " correct answers and " + wrong + " wrong answers.")
+    });
 });
