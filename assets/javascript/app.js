@@ -14,18 +14,18 @@
 // Increment correct or incorrect answers accordingly
 
 $(document).ready(function() {
-    $("#questions").hide();
+    var timerIntervalId;
+    var timeLeft = 10;
 
-    $("#start-quiz").on("click", function() {
-        $("#start-quiz").hide();
-        $("#questions").show();
-
-    });
-
-    $("#submit").on("click", function() {
+    function calculateAnswers () {
+        
         var correct = 0;
         var wrong = 0;
 
+        $("#questions").hide();
+        $("#time-left").hide();
+        
+        clearInterval(timerIntervalId);
         //Checking number of questions in the form, 
         //TO DO create a FOR loop based on this
         for ( j = 0 ; j < document.forms.length ; j++ ) {
@@ -34,8 +34,6 @@ $(document).ready(function() {
             // TO DO = do it with all questions (forms)
             var answers = document.forms[j];
             
-            console.log(answers);
-            console.log(answers.length);
             for (var i = 0 ; i < answers.length ; i++) {
                 if (answers[i].checked && answers[i].value === 'correct') {
                     console.log("CORRECT!!")
@@ -47,6 +45,38 @@ $(document).ready(function() {
                 }
             }
         }
-        console.log(correct + " correct answers and " + wrong + " wrong answers.")
+        
+        $(".results").text(correct + " correct answers and " + wrong + " wrong answers.");
+
+    }
+
+    function runTimer () {
+        timeLeft--;
+        if (timeLeft <= 0) {
+            clearInterval(timerIntervalId);
+            $("#time-left").text("TIME'S UP");
+            $("#questions").hide();
+            calculateAnswers();
+            return;
+        }
+        $("#time-left").text(timeLeft);
+    }
+
+    
+    $("#questions").hide();
+    $("#time-left").hide();
+
+
+    $("#start-quiz").on("click", function() {
+
+        $("#time-left").show();
+
+        timerIntervalId = setInterval(runTimer, 1000);
+        
+        $("#start-quiz").hide();
+        $("#questions").show();
+        
     });
+
+    $("#submit").on("click", calculateAnswers);
 });
